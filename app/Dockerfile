@@ -5,6 +5,6 @@ FROM php:7.4-apache
 RUN docker-php-ext-install mysqli
 
 # กำหนด Directory สำหรับเก็บไฟล์เว็บ
-COPY ./app/ /var/www/html/
+COPY . /var/www/html/
 
 EXPOSE 80

@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: AppSQL
-          image: thawatchai95/hello-web:sha-0e1c0ee73d9f919b2acbd11499d5139de6357474
+          image: thawatchai95/appsql
           imagePullPolicy: Always
           ports:
             - containerPort: 80

@@ -5,7 +5,7 @@ on:
     branches: ["main"]
     paths:
       - '.github/workflows/docker-build-push.yml'
-      - '.app/*'
+      - '.app/**'
 
 permissions:
   contents: write
@@ -36,7 +36,8 @@ jobs:
       - name: Build and push image
         uses: docker/build-push-action@v6
         with:
-          context: .
+          context: ./app
+          file: ./app/Dockerfile
           push: true
           tags: |
             ${{ env.DOCKERHUB_REPO }}:latest
