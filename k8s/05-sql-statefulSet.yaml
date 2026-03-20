@@ -21,7 +21,7 @@ spec:
           - name: MYSQL_ROOT_PASSWORD
             value: "P@ssw0rd"  # รหัสผ่าน root ของ MySQL
           - name: MYSQL_DATABASE
-            value: "mydatabase
+            value: "mydatabase"
         volumeMounts:
           - name: mysql-storage
             mountPath: /var/lib/mysql
