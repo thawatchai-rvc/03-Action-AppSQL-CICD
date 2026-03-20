@@ -2,7 +2,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: appsql-ingress
-  namespace: appsql
+  namespace: default
   annotations:
     # ลบบรรทัด kubernetes.io/ingress.class ออก
     
