@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: mysql
+  name: sql-service
   namespace: default
 spec:
   clusterIP: None  # ใช้ clusterIP แบบนี้ เพื่อให้ Pod มี hostname คงที่
