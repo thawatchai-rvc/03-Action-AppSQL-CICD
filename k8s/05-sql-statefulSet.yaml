@@ -23,6 +23,7 @@ spec:
         volumeMounts:
           - name: mysql-storage
             mountPath: /var/lib/mysql
+            subPath: mysql-data
   volumeClaimTemplates:
     - metadata:
         name: mysql-storage
