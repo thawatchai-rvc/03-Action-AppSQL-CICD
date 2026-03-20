@@ -1,0 +1,66 @@
+name: Build & Push to Docker Hub
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - '.github/workflows/docker-build-push.yml'
+      - '.app/*'
+
+permissions:
+  contents: write
+
+env:
+  DOCKERHUB_REPO: thawatchai95/AppSQL
+  MANIFEST_PATH: k8s/01-app-deployment.yaml
+
+jobs:
+  build_and_push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_TOKEN }}
+
+      - name: Build and push image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ env.DOCKERHUB_REPO }}:latest
+            ${{ env.DOCKERHUB_REPO }}:sha-${{ github.sha }}
+
+      - name: Update deployment image tag
+        run: |
+          sed -i "s|image: .*|image: ${{ env.DOCKERHUB_REPO }}:sha-${{ github.sha }}|g" ${{ env.MANIFEST_PATH }}
+          echo "Updated manifest:"
+          cat ${{ env.MANIFEST_PATH }}
+
+      - name: Commit and push manifest change
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add ${{ env.MANIFEST_PATH }}
+
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+
+          git commit -m "Update deployment image to sha-${{ github.sha }}"
+
+          git pull --rebase origin main
+          git push origin main

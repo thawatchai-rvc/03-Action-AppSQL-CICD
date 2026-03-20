@@ -1,0 +1,30 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: AppSQL-ingress
+  namespace: AppSQL
+  annotations:
+    # ลบบรรทัด kubernetes.io/ingress.class ออก
+    
+    # เอาเฉพาะ annotations ที่จำเป็นและปลอดภัย
+    nginx.ingress.kubernetes.io/forwarded-for-header: "X-Forwarded-For"
+    nginx.ingress.kubernetes.io/use-forwarded-headers: "true"
+    
+    # ลบ configuration-snippet ออก หรือ comment ไว้
+    # nginx.ingress.kubernetes.io/configuration-snippet: |
+    #   more_set_headers "X-Powered-By: Hello-Web";
+
+spec:
+  # เพิ่ม ingressClassName แทน annotation เก่า
+  ingressClassName: nginx
+  rules:
+  - host: AppSQL.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: AppSQL-service
+            port:
+              number: 80
