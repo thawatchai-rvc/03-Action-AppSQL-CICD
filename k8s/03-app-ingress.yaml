@@ -12,10 +12,10 @@ spec:
     - name: http
       port: 80
       targetPort: 80
-      nodePort: 30080  # ค่า NodePort สำหรับ HTTP
+      nodePort: 31080  # ค่า NodePort สำหรับ HTTP
     - name: https
       port: 443
       targetPort: 443
-      nodePort: 30443  # ค่า NodePort สำหรับ HTTPS
+      nodePort: 31443  # ค่า NodePort สำหรับ HTTPS
   selector:
     app.kubernetes.io/name: ingress-nginx
