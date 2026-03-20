@@ -11,7 +11,7 @@ permissions:
   contents: write
 
 env:
-  DOCKERHUB_REPO: thawatchai95/AppSQL
+  DOCKERHUB_REPO: thawatchai95/appsql
   MANIFEST_PATH: k8s/01-app-deployment.yaml
 
 jobs:
