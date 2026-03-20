@@ -1,8 +1,8 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: AppSQL-ingress
-  namespace: AppSQL
+  name: appsql-ingress
+  namespace: appsql
   annotations:
     # ลบบรรทัด kubernetes.io/ingress.class ออก
     
@@ -18,13 +18,13 @@ spec:
   # เพิ่ม ingressClassName แทน annotation เก่า
   ingressClassName: nginx
   rules:
-  - host: AppSQL.com
+  - host: appsql.com
     http:
       paths:
       - path: /
         pathType: Prefix
         backend:
           service:
-            name: AppSQL-service
+            name: appsql-service
             port:
               number: 80

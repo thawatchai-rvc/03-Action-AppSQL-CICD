@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: AppSQL-deployment
+  name: appsql-deployment
   namespace: default
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: AppSQL
+      app: appsql
   template:
     metadata:
       labels:
-        app: AppSQL
+        app: appsql
     spec:
       containers:
-        - name: AppSQL
+        - name: appsql
           image: thawatchai95/appsql
           imagePullPolicy: Always
           ports:

@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: AppSQL-service
+  name: appsql-service
   namespace: default
 spec:
   selector:
-    app: AppSQL
+    app: appsql
   ports:
     - port: 80
       targetPort: 80
