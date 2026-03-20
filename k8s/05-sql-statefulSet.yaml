@@ -17,7 +17,11 @@ spec:
       containers:
       - name: mysql
         image: mysql:5.7
+        args:
+        - --default-time-zone=+07:00
         env:
+          - name: TZ
+            value: Asia/Bangkok
           - name: MYSQL_ROOT_PASSWORD
             value: "P@ssw0rd"  # รหัสผ่าน root ของ MySQL
           - name: MYSQL_DATABASE
