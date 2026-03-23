@@ -1,28 +1,64 @@
 <?php
-$servername = "mysql.default.svc.cluster.local";  // Service name ของ MySQL ใน Kubernetes
-$username = "root";  // ใช้เป็น root user
-$password = "P@ssw0rd";  // รหัสผ่านที่ตั้งไว้ใน StatefulSet
-$dbname = "mydatabase";  // ชื่อฐานข้อมูลที่ต้องการใช้
+header('Content-Type: application/json; charset=utf-8');
 
-// เชื่อมต่อกับ MySQL
+$servername = "sql-service";
+$username   = "root";
+$password   = "P@ssw0rd";
+$dbname     = "mydatabase";
+
+if ($_SERVER["REQUEST_METHOD"] !== "POST") {
+    echo json_encode([
+        "success" => false,
+        "message" => "Method not allowed"
+    ]);
+    exit;
+}
+
+$user_input = trim($_POST['username'] ?? '');
+
+if ($user_input === '') {
+    echo json_encode([
+        "success" => false,
+        "message" => "กรุณากรอกชื่อผู้ใช้"
+    ]);
+    exit;
+}
+
 $conn = new mysqli($servername, $username, $password, $dbname);
 
-// ตรวจสอบการเชื่อมต่อ
 if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+    echo json_encode([
+        "success" => false,
+        "message" => "เชื่อมต่อฐานข้อมูลไม่สำเร็จ: " . $conn->connect_error
+    ]);
+    exit;
 }
 
-// รับข้อมูลจาก form
-$user_input = $_POST['username'];
+$stmt = $conn->prepare("INSERT INTO users (username) VALUES (?)");
 
-// Insert ข้อมูลลงในฐานข้อมูล
-$sql = "INSERT INTO users (username) VALUES ('$user_input')";
+if (!$stmt) {
+    echo json_encode([
+        "success" => false,
+        "message" => "Prepare statement ไม่สำเร็จ: " . $conn->error
+    ]);
+    $conn->close();
+    exit;
+}
 
-if ($conn->query($sql) === TRUE) {
-    echo "New record created successfully";
+$stmt->bind_param("s", $user_input);
+
+if ($stmt->execute()) {
+    echo json_encode([
+        "success" => true,
+        "message" => "บันทึกข้อมูลผู้ใช้สำเร็จ"
+    ]);
 } else {
-    echo "Error: " . $sql . "<br>" . $conn->error;
+    echo json_encode([
+        "success" => false,
+        "message" => "บันทึกข้อมูลไม่สำเร็จ: " . $stmt->error
+    ]);
 }
 
+$stmt->close();
 $conn->close();
 ?>
