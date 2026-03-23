@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: appsql
-          image: thawatchai95/appsql:sha-953a7222b1da558b4b1f96495a073fb1aa60a288
+          image: thawatchai95/appsql:sha-23b530f25a9290148f992057beff9568b3ed85b4
           imagePullPolicy: Always
           ports:
             - containerPort: 80
