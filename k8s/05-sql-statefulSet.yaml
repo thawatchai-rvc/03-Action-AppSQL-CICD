@@ -23,9 +23,15 @@ spec:
           - name: TZ
             value: Asia/Bangkok
           - name: MYSQL_ROOT_PASSWORD
-            value: "P@ssw0rd"  # รหัสผ่าน root ของ MySQL
+            valueFrom:
+              secretKeyRef:
+                name: appsql-secret
+                key: DB_PASSWORD
           - name: MYSQL_DATABASE
-            value: "mydatabase"
+            valueFrom:
+              secretKeyRef:
+                name: appsql-secret
+                key: DB_PASSWORD
         volumeMounts:
           - name: mysql-storage
             mountPath: /var/lib/mysql
