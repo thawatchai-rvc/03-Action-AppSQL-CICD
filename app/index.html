@@ -5,9 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>WebApp + MySQL Demo</title>
   <style>
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -37,7 +35,6 @@
       border-radius: 20px;
       box-shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
       padding: 32px;
-      backdrop-filter: blur(8px);
     }
 
     .hero {
@@ -65,9 +62,7 @@
       color: #0f172a;
     }
 
-    .highlight {
-      color: #2563eb;
-    }
+    .highlight { color: #2563eb; }
 
     .desc {
       margin: 0 0 24px;
@@ -107,9 +102,7 @@
       font-size: 14px;
     }
 
-    .form-group {
-      margin-bottom: 18px;
-    }
+    .form-group { margin-bottom: 18px; }
 
     label {
       display: block;
@@ -145,19 +138,24 @@
       font-size: 15px;
       font-weight: 700;
       cursor: pointer;
-      transition: transform 0.15s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+      transition: 0.2s ease;
       box-shadow: 0 10px 20px rgba(37, 99, 235, 0.22);
     }
 
-    .btn:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 14px 26px rgba(37, 99, 235, 0.28);
-    }
+    .btn:hover { transform: translateY(-1px); }
+    .btn:disabled { opacity: 0.7; cursor: not-allowed; }
 
-    .btn:disabled {
-      opacity: 0.7;
-      cursor: not-allowed;
-      transform: none;
+    .btn-secondary {
+      width: 100%;
+      margin-top: 10px;
+      padding: 12px 16px;
+      border: 1px solid #cbd5e1;
+      border-radius: 12px;
+      background: white;
+      color: #334155;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
     }
 
     .note {
@@ -176,10 +174,6 @@
       text-align: center;
       font-size: 12px;
       color: #94a3b8;
-    }
-
-    .table-card {
-      overflow: hidden;
     }
 
     .table-header {
@@ -216,7 +210,7 @@
     table {
       width: 100%;
       border-collapse: collapse;
-      min-width: 520px;
+      min-width: 720px;
     }
 
     thead {
@@ -228,6 +222,7 @@
       text-align: left;
       border-bottom: 1px solid #e2e8f0;
       font-size: 14px;
+      vertical-align: middle;
     }
 
     th {
@@ -243,14 +238,34 @@
       background: #f8fbff;
     }
 
+    .action-buttons {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn-small {
+      border: none;
+      border-radius: 10px;
+      padding: 8px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .btn-edit {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .btn-delete {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
     .empty-state {
       padding: 24px;
       text-align: center;
-      color: #64748b;
-      font-size: 14px;
-    }
-
-    .loading {
       color: #64748b;
       font-size: 14px;
     }
@@ -319,26 +334,27 @@
     <div class="container">
       <section class="card hero">
         <span class="badge">Kubernetes + MySQL Demo</span>
-        <h1>สวัสดี 👋<br>นี่คือ <span class="highlight">WebApp เชื่อมต่อฐานข้อมูล</span></h1>
+        <h1>สวัสดี 👋<br>นี่คือ <span class="highlight">WebApp จัดการผู้ใช้</span></h1>
         <p class="desc">
-          หน้าเว็บนี้ใช้สำหรับทดสอบการส่งข้อมูลจาก Web Application ไปยัง MySQL
-          ที่รันอยู่บน Kubernetes โดยสามารถนำไปต่อยอดกับ Ingress, ArgoCD,
-          Longhorn และ CI/CD ได้ต่อเลย
+          ตอนนี้ระบบสามารถเพิ่ม แก้ไข ลบ และแสดงข้อมูลผู้ใช้จาก MySQL
+          ที่รันอยู่บน Kubernetes ได้แล้ว
         </p>
 
         <ul class="feature-list">
-          <li>✅ Frontend HTML ใช้งานง่าย</li>
-          <li>✅ Backend PHP เชื่อมต่อ MySQL</li>
-          <li>✅ แสดงรายการผู้ใช้แบบ realtime หลังบันทึก</li>
-          <li>✅ เหมาะสำหรับ Demo, Lab และฝึก CI/CD</li>
+          <li>✅ เพิ่มข้อมูลผู้ใช้</li>
+          <li>✅ แก้ไขข้อมูลผู้ใช้</li>
+          <li>✅ ลบข้อมูลผู้ใช้</li>
+          <li>✅ แสดงข้อมูลแบบ realtime</li>
         </ul>
       </section>
 
       <section class="card form-card">
-        <h2>เพิ่มข้อมูลผู้ใช้</h2>
+        <h2 id="formTitle">เพิ่มข้อมูลผู้ใช้</h2>
         <p class="form-subtitle">กรอกชื่อที่ต้องการบันทึกลงฐานข้อมูล</p>
 
         <form id="userForm">
+          <input type="hidden" id="userId" name="id" />
+
           <div class="form-group">
             <label for="username">ชื่อผู้ใช้</label>
             <input
@@ -351,11 +367,13 @@
           </div>
 
           <button type="submit" class="btn" id="submitBtn">บันทึกข้อมูล</button>
+          <button type="button" class="btn-secondary" id="cancelEditBtn" style="display:none;">
+            ยกเลิกการแก้ไข
+          </button>
         </form>
 
         <div class="note">
-          หมายเหตุ: เมื่อกดปุ่ม ระบบจะส่งข้อมูลไปที่ <strong>submit.php</strong>
-          เพื่อ INSERT ลงตาราง <strong>users</strong> และรีเฟรชตารางด้านล่างอัตโนมัติ
+          ถ้าเลือกแก้ไขจากตารางด้านล่าง ฟอร์มนี้จะเปลี่ยนเป็นโหมดแก้ไขทันที
         </div>
 
         <div class="footer">
@@ -377,14 +395,15 @@
         <table>
           <thead>
             <tr>
-              <th style="width: 100px;">ID</th>
+              <th style="width: 90px;">ID</th>
               <th>Username</th>
               <th style="width: 220px;">Created At</th>
+              <th style="width: 180px;">Action</th>
             </tr>
           </thead>
           <tbody id="userTableBody">
             <tr>
-              <td colspan="3" class="empty-state">กำลังโหลดข้อมูล...</td>
+              <td colspan="4" class="empty-state">กำลังโหลดข้อมูล...</td>
             </tr>
           </tbody>
         </table>
@@ -394,13 +413,17 @@
 
   <script>
     const form = document.getElementById("userForm");
+    const userIdInput = document.getElementById("userId");
     const usernameInput = document.getElementById("username");
     const submitBtn = document.getElementById("submitBtn");
+    const cancelEditBtn = document.getElementById("cancelEditBtn");
+    const formTitle = document.getElementById("formTitle");
     const refreshBtn = document.getElementById("refreshBtn");
     const toast = document.getElementById("toast");
     const userTableBody = document.getElementById("userTableBody");
 
     let toastTimer;
+    let isEditMode = false;
 
     function showToast(message, type = "success") {
       toast.textContent = message;
@@ -421,10 +444,31 @@
         .replace(/'/g, "&#039;");
     }
 
+    function resetForm() {
+      isEditMode = false;
+      form.reset();
+      userIdInput.value = "";
+      formTitle.textContent = "เพิ่มข้อมูลผู้ใช้";
+      submitBtn.textContent = "บันทึกข้อมูล";
+      cancelEditBtn.style.display = "none";
+      usernameInput.focus();
+    }
+
+    function setEditMode(id, username) {
+      isEditMode = true;
+      userIdInput.value = id;
+      usernameInput.value = username;
+      formTitle.textContent = "แก้ไขข้อมูลผู้ใช้";
+      submitBtn.textContent = "อัปเดตข้อมูล";
+      cancelEditBtn.style.display = "block";
+      usernameInput.focus();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
     async function loadUsers() {
       userTableBody.innerHTML = `
         <tr>
-          <td colspan="3" class="empty-state">กำลังโหลดข้อมูล...</td>
+          <td colspan="4" class="empty-state">กำลังโหลดข้อมูล...</td>
         </tr>
       `;
 
@@ -435,7 +479,7 @@
         if (!result.success) {
           userTableBody.innerHTML = `
             <tr>
-              <td colspan="3" class="empty-state">${escapeHtml(result.message || "โหลดข้อมูลไม่สำเร็จ")}</td>
+              <td colspan="4" class="empty-state">${escapeHtml(result.message || "โหลดข้อมูลไม่สำเร็จ")}</td>
             </tr>
           `;
           return;
@@ -444,7 +488,7 @@
         if (!result.data || result.data.length === 0) {
           userTableBody.innerHTML = `
             <tr>
-              <td colspan="3" class="empty-state">ยังไม่มีข้อมูลในตาราง users</td>
+              <td colspan="4" class="empty-state">ยังไม่มีข้อมูลในตาราง users</td>
             </tr>
           `;
           return;
@@ -455,34 +499,46 @@
             <td>${escapeHtml(user.id)}</td>
             <td>${escapeHtml(user.username)}</td>
             <td>${escapeHtml(user.created_at)}</td>
+            <td>
+              <div class="action-buttons">
+                <button
+                  class="btn-small btn-edit"
+                  onclick="editUser('${escapeHtml(user.id)}', '${escapeHtml(user.username)}')"
+                >
+                  แก้ไข
+                </button>
+                <button
+                  class="btn-small btn-delete"
+                  onclick="deleteUser('${escapeHtml(user.id)}')"
+                >
+                  ลบ
+                </button>
+              </div>
+            </td>
           </tr>
         `).join("");
       } catch (error) {
         userTableBody.innerHTML = `
           <tr>
-            <td colspan="3" class="empty-state">ไม่สามารถเชื่อมต่อเพื่อโหลดข้อมูลได้</td>
+            <td colspan="4" class="empty-state">ไม่สามารถเชื่อมต่อเพื่อโหลดข้อมูลได้</td>
           </tr>
         `;
       }
     }
 
-    form.addEventListener("submit", async function (event) {
-      event.preventDefault();
+    window.editUser = function(id, username) {
+      setEditMode(id, username);
+    };
 
-      const username = usernameInput.value.trim();
-      if (!username) {
-        showToast("กรุณากรอกชื่อผู้ใช้", "error");
-        return;
-      }
-
-      submitBtn.disabled = true;
-      submitBtn.textContent = "กำลังบันทึก...";
+    window.deleteUser = async function(id) {
+      const confirmed = confirm(`ต้องการลบข้อมูล user ID ${id} ใช่หรือไม่?`);
+      if (!confirmed) return;
 
       try {
         const formData = new FormData();
-        formData.append("username", username);
+        formData.append("id", id);
 
-        const response = await fetch("submit.php", {
+        const response = await fetch("delete_user.php", {
           method: "POST",
           body: formData
         });
@@ -490,9 +546,52 @@
         const result = await response.json();
 
         if (result.success) {
-          showToast(result.message || "บันทึกข้อมูลสำเร็จ", "success");
-          form.reset();
-          usernameInput.focus();
+          showToast(result.message || "ลบข้อมูลสำเร็จ", "success");
+          await loadUsers();
+          if (userIdInput.value === id) {
+            resetForm();
+          }
+        } else {
+          showToast(result.message || "ลบข้อมูลไม่สำเร็จ", "error");
+        }
+      } catch (error) {
+        showToast("ไม่สามารถลบข้อมูลได้", "error");
+      }
+    };
+
+    form.addEventListener("submit", async function(event) {
+      event.preventDefault();
+
+      const username = usernameInput.value.trim();
+      const id = userIdInput.value.trim();
+
+      if (!username) {
+        showToast("กรุณากรอกชื่อผู้ใช้", "error");
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = isEditMode ? "กำลังอัปเดต..." : "กำลังบันทึก...";
+
+      try {
+        const formData = new FormData();
+        formData.append("username", username);
+
+        const endpoint = isEditMode ? "update_user.php" : "submit.php";
+        if (isEditMode) {
+          formData.append("id", id);
+        }
+
+        const response = await fetch(endpoint, {
+          method: "POST",
+          body: formData
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          showToast(result.message || (isEditMode ? "อัปเดตข้อมูลสำเร็จ" : "บันทึกข้อมูลสำเร็จ"), "success");
+          resetForm();
           await loadUsers();
         } else {
           showToast(result.message || "เกิดข้อผิดพลาด", "error");
@@ -501,10 +600,11 @@
         showToast("ไม่สามารถเชื่อมต่อกับระบบได้", "error");
       } finally {
         submitBtn.disabled = false;
-        submitBtn.textContent = "บันทึกข้อมูล";
+        submitBtn.textContent = isEditMode ? "อัปเดตข้อมูล" : "บันทึกข้อมูล";
       }
     });
 
+    cancelEditBtn.addEventListener("click", resetForm);
     refreshBtn.addEventListener("click", loadUsers);
 
     loadUsers();

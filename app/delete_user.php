@@ -11,10 +11,10 @@ if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     exit;
 }
 
-$user_input = trim($_POST['username'] ?? '');
+$id = intval($_POST['id'] ?? 0);
 
-if ($user_input === '') {
-    echo json_encode(["success" => false, "message" => "กรุณากรอกชื่อผู้ใช้"]);
+if ($id <= 0) {
+    echo json_encode(["success" => false, "message" => "ID ไม่ถูกต้อง"]);
     exit;
 }
 
@@ -25,7 +25,7 @@ if ($conn->connect_error) {
     exit;
 }
 
-$stmt = $conn->prepare("INSERT INTO users (username) VALUES (?)");
+$stmt = $conn->prepare("DELETE FROM users WHERE id = ?");
 
 if (!$stmt) {
     echo json_encode(["success" => false, "message" => "Prepare statement ไม่สำเร็จ: " . $conn->error]);
@@ -33,12 +33,12 @@ if (!$stmt) {
     exit;
 }
 
-$stmt->bind_param("s", $user_input);
+$stmt->bind_param("i", $id);
 
 if ($stmt->execute()) {
-    echo json_encode(["success" => true, "message" => "บันทึกข้อมูลผู้ใช้สำเร็จ"]);
+    echo json_encode(["success" => true, "message" => "ลบข้อมูลผู้ใช้สำเร็จ"]);
 } else {
-    echo json_encode(["success" => false, "message" => "บันทึกข้อมูลไม่สำเร็จ: " . $stmt->error]);
+    echo json_encode(["success" => false, "message" => "ลบข้อมูลไม่สำเร็จ: " . $stmt->error]);
 }
 
 $stmt->close();
