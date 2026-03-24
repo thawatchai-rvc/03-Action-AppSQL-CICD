@@ -44,4 +44,4 @@ spec:
         resources:
           requests:
             storage: 5Gi
-        storageClassName: longhorn  # ใช้ Longhorn เป็น Storage
+        storageClassName: longhorn-mysql  # ใช้ Longhorn เป็น Storage
