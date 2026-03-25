@@ -5,6 +5,7 @@ metadata:
   namespace: default
 spec:
   replicas: 3
+  revisionHistoryLimit: 2  # สำคัญ!
   selector:
     matchLabels:
       app: appsql
